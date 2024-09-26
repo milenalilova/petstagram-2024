@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 
 def index(request):
-    return None
+    return render(request, 'common/home-page.html')
