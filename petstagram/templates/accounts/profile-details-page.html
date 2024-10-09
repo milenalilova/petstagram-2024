@@ -18,7 +18,7 @@
 
                     <!-- IF the viewer is the owner of the profile -->
                     <!-- Link to Edit Profile Page -->
-                    <a href="#">
+                    <a href="{% url 'edit-profile' %}">
                         <img
                                 class="edit-img"
                                 src="/static/images/edit-pen-icon-6.jpg"
@@ -27,7 +27,7 @@
                     </a>
 
                     <!-- Link to Delete Profile Page -->
-                    <a href="">
+                    <a href="{% url 'delete-profile' %}">
                         <img
                                 class="bin-img"
                                 src="/static/images/icon-remove-22.jpg"
@@ -66,7 +66,7 @@
             <div class="statuses">
                 <!-- Start 1st Pet Details Page -->
                 <!-- Link to First Pet Details Page -->
-                <a href="#">
+                <a href="{% url 'show_pet_details' %}">
                     <div class="head-pet">
                         <div class="status">
                             <div class="image">
