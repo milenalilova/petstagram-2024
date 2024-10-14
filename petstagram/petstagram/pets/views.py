@@ -1,10 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from petstagram.pets.forms import PetForm
 from petstagram.pets.models import Pet
 
 
 def add_pet(request):
-    return render(request, 'pets/pet-add-page.html')
+    form = PetForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('profile-details', pk=1)
+
+    context = {'form': form}
+
+    return render(request, 'pets/pet-add-page.html', context)
 
 
 def show_pet_details(request, username, pet_slug):
