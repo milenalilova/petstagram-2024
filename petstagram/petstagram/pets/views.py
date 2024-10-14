@@ -25,7 +25,19 @@ def show_pet_details(request, username, pet_slug):
 
 
 def edit_pet(request, username, pet_slug):
-    return render(request, 'pets/pet-edit-page.html')
+    pet = Pet.objects.get(slug=pet_slug)
+
+    if request.method == 'GET':
+        form = PetForm(instance=pet, initial=pet.__dict__)
+    else:
+        form = PetForm(request.POST or None, instance=pet)
+        if form.is_valid():
+            form.save()
+            return redirect('show_pet_details', username=username, pet_slug=pet.slug)
+
+    context = {'form': form}
+
+    return render(request, 'pets/pet-edit-page.html', context)
 
 
 def delete_pet(request, username, pet_slug):
