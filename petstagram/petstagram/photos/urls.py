@@ -8,6 +8,7 @@ path('add/', views.add_photo, name='add-photo'),
         [
             path('', views.show_photo_details, name='show-photo-details'),
             path('edit/', views.edit_photo, name='edit-photo'),
+            path('delete/', views.delete_photo, name='delete-photo'),
         ]
     )),
 ]
