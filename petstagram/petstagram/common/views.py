@@ -12,9 +12,11 @@ def index(request):
     search_form = SearchForm(request.GET)
 
     if search_form.is_valid():
-        all_photos = all_photos.filter(
-            tagged_pets__name__icontains=search_form.cleaned_data['pet_name'],
-        )
+        search_pattern = search_form.cleaned_data['pet_name']
+        if search_pattern:
+            all_photos = all_photos.filter(
+                tagged_pets__name__icontains=search_form.cleaned_data['pet_name']
+            )
 
     context = {
         'all_photos': all_photos,

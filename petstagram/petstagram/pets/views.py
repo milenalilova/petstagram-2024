@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
 from petstagram.common.forms import CommentForm
 from petstagram.pets.forms import PetForm, PetDeleteForm
@@ -14,6 +16,12 @@ def add_pet(request):
     context = {'form': form}
 
     return render(request, 'pets/pet-add-page.html', context)
+
+# class AddPetView(CreateView):
+#     model = Pet
+#     form_class = PetForm
+#     template_name = 'pets/pet-add-page.html'
+#     success_url = reverse_lazy('profile-details', kwargs={'pk': 1})
 
 
 def show_pet_details(request, username, pet_slug):
