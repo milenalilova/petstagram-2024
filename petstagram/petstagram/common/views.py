@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, resolve_url
 from pyperclip import copy
 
@@ -17,6 +18,12 @@ def index(request):
             all_photos = all_photos.filter(
                 tagged_pets__name__icontains=search_form.cleaned_data['pet_name']
             )
+
+    photos_per_page=1
+    paginator = Paginator(all_photos, photos_per_page)
+    page_number = request.GET.get('page')       # http://localhost:8000/?page=10 => GET {'page': 10}
+
+    all_photos = paginator.get_page(page_number)
 
     context = {
         'all_photos': all_photos,
