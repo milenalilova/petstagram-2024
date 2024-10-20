@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, resolve_url
+from django.views.generic import ListView
 from pyperclip import copy
 
 from petstagram.common.forms import CommentForm, SearchForm
@@ -7,31 +8,55 @@ from petstagram.common.models import Like
 from petstagram.photos.models import Photo
 
 
-def index(request):
-    all_photos = Photo.objects.all()
-    comment_form = CommentForm()
-    search_form = SearchForm(request.GET)
+# def index(request):
+#     all_photos = Photo.objects.all()
+#     comment_form = CommentForm()
+#     search_form = SearchForm(request.GET)
+#
+#     if search_form.is_valid():
+#         search_pattern = search_form.cleaned_data['pet_name']
+#         if search_pattern:
+#             all_photos = all_photos.filter(
+#                 tagged_pets__name__icontains=search_form.cleaned_data['pet_name']
+#             )
+#
+#     photos_per_page=1
+#     paginator = Paginator(all_photos, photos_per_page)
+#     page_number = request.GET.get('page')       # http://localhost:8000/?page=10 => GET {'page': 10}
+#
+#     all_photos = paginator.get_page(page_number)
+#
+#     context = {
+#         'all_photos': all_photos,
+#         'comment_form': comment_form,
+#         'search_form': search_form,
+#     }
+#
+#     return render(request, 'common/home-page.html', context)
 
-    if search_form.is_valid():
-        search_pattern = search_form.cleaned_data['pet_name']
-        if search_pattern:
-            all_photos = all_photos.filter(
-                tagged_pets__name__icontains=search_form.cleaned_data['pet_name']
-            )
 
-    photos_per_page=1
-    paginator = Paginator(all_photos, photos_per_page)
-    page_number = request.GET.get('page')       # http://localhost:8000/?page=10 => GET {'page': 10}
+# TODO fix paginator CSS
+# TODO fix Search Form
+class HomePgeView(ListView):
+    model = Photo
+    template_name = 'common/home-page.html'
+    context_object_name = 'all_photos'  # by default is object_list and photos
+    paginate_by = 1
 
-    all_photos = paginator.get_page(page_number)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
+        context['search_form'] = SearchForm(self.request.GET)
+        return context
 
-    context = {
-        'all_photos': all_photos,
-        'comment_form': comment_form,
-        'search_form': search_form,
-    }
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        pet_name = self.request.GET.get('pet_name')
 
-    return render(request, 'common/home-page.html', context)
+        if pet_name:
+            queryset = queryset.filter(tagged_pets__name__icontains=pet_name)
+
+        return queryset
 
 
 def like_functionality(request, photo_id):
