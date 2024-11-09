@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
+from petstagram.accounts.managers import AppUserManager
+
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=False, blank=False)
@@ -11,6 +13,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    objects = AppUserManager()
 
     def __str__(self):
         return self.email
