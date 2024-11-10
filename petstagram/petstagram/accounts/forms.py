@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AuthenticationForm
+from django import forms
 
 UserModel = get_user_model()
 
@@ -15,3 +16,5 @@ class AppUserCreationForm(UserCreationForm):
         fields = ('email',)
 
 
+class AppUserLoginForm(AuthenticationForm):
+    email = forms.EmailField()

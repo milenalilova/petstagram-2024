@@ -11,27 +11,12 @@
             <form method="post">
                 {% csrf_token %}
 
-                {% with form.email as email_field %}
-                    {{ email_field|placeholder:'Email' }}
-                    {{ form.email.errors }}
-                {% endwith %}
-
-                {% with form.password1 as password1_field %}
-                    {{ password1_field|placeholder:'Password' }}
-                    {{ form.password1.errors }}
-                {% endwith %}
-
-                {% with form.password2 as password2_field %}
-                    {{ password2_field|placeholder:'Repeat Password' }}
-                    {{ form.password2.errors }}
-                {% endwith %}
-            
-                {#                {{ form.email|placeholder: 'Email' }}#}
-                {#                {{ form.email.errors }}#}
-                {#                {{ form.password1|placeholder: 'Password' }}#}
-                {#                {{ form.password1.errors }}#}
-                {#                {{ form.password2|placeholder: 'Repeat Password' }}#}
-                {#                {{ form.password2.errors }}#}
+                {{ form.email|placeholder:'Email' }}
+                {{ form.email.errors }}
+                {{ form.password1|placeholder:'Password' }}
+                {{ form.password1.errors }}
+                {{ form.password2|placeholder:'Repeat Password' }}
+                {{ form.password2.errors }}
 
                 <!-- Register Button -->
                 <button type="submit">Register</button>
