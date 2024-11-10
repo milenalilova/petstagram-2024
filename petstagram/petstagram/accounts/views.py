@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import Count
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
 
 from petstagram.accounts.forms import AppUserCreationForm, ProfileEditForm
 
@@ -24,12 +25,21 @@ class AppUserLogoutView(LogoutView):
     pass
 
 
-def show_profile_details(request, pk):
-    return render(request, 'accounts/profile-details-page.html')
+class AppUserDetailView(DetailView):
+    model = UserModel
+    template_name = 'accounts/profile-details-page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-# def edit_profile(request, pk):
-#     return render(request, 'accounts/profile-edit-page.html')
+        photos_with_likes = self.object.photo_set.annotate(likes_count=Count('like'))
+
+        context['total_likes_count'] = sum(photo.likes_count for photo in photos_with_likes)
+        context['total_pets_count'] = self.object.pet_set.count()
+        context['total_photos_count'] = self.object.photo_set.count()
+
+        return context
+
 
 class ProfileEditView(UpdateView):
     model = UserModel

@@ -7,20 +7,24 @@
     <div class="top">
         <div class="userDetails">
             <!-- Link to User Profile Page -->
-            <a href="#">
+            <a href="{% url 'profile-details' photo.user.pk %}">
                 <div class="profilepic">
                     <div class="profile_img">
                         <div class="image">
-                            <img src="{% static 'images/person.png' %}" alt="img8">
+                            {% if photo.user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture }}" alt="">
+                            {% else %}
+                                <img src="{% static 'images/person.png' %}" alt="img8">
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </a>
             <h3>
                 <!-- Link to User Profile Page -->
-                <a href="#">
+                <a href="{% url 'profile-details' photo.user.pk %}">
                     <!-- if user has first name and last name -->
-                    Diyan Kalaydzhiev
+                    {{ photo.user.profile.get_profile_name }}
                     <!-- else -->
                     <!-- show user username -->
                 </a>
@@ -30,7 +34,7 @@
                     <span>{{ photo.location }}</span>
                 {% endif %}
 
-                {% if photo_page %}
+                {% if photo_page and request.user.pk == photo.user.pk %}
                     <div class="edit-delete-btns">
 
                         <!-- Link to Edit Pet Photo Page -->
@@ -93,7 +97,7 @@
         <!-- Start Tagged Pets -->
         {% for pet in photo.tagged_pets.all %}
             <!-- Link to First Tagged Pet Details Page-->
-            <a href="{% url 'show_pet_details' "username" pet.slug %}">
+            <a href="{% url 'show_pet_details' pet.user.profile.get_profile_name|lower pet.slug %}">
                 <p class="message">
                     <b>{{ pet.name }}</b>
                 </p>
