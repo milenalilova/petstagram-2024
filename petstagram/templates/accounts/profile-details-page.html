@@ -25,7 +25,6 @@
                     {% if request.user.pk == object.pk %}
                         <!-- Link to Edit Profile Page -->
                         <a href="{% url 'edit-profile' request.user.pk %}">
-                            {% else %}
                             <img
                                     class="edit-img"
                                     src="{% static 'images/edit-pen-icon-6.jpg' %}"
@@ -41,8 +40,8 @@
                                     alt=" bin button"
                             />
                         </a>
-                        <!-- End IF the viewer is the owner of the profile -->
                     {% endif %}
+                        <!-- End IF the viewer is the owner of the profile -->
 
                 </div>
                 <div class="data">

@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 
 from petstagram.accounts.forms import AppUserCreationForm, ProfileEditForm
 
@@ -56,5 +56,17 @@ class ProfileEditView(UpdateView):
         )
 
 
-def delete_profile(request, pk):
-    return render(request, 'accounts/profile-delete-page.html')
+# def delete_profile(request, pk):
+#     return render(request, 'accounts/profile-delete-page.html')*
+class AppUserDeleteView(DeleteView):
+    model = UserModel
+    template_name = 'accounts/profile-delete-page.html'
+    success_url = reverse_lazy('home-page')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        return redirect(self.get_success_url())
